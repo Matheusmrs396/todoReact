@@ -16,41 +16,44 @@ function App() {
     const loadData = async()=>{
       setLoading(true);
 
-      const res = await fetch(API + "/todos").then((res)=> res.json).then((data)=> data);
+      const res = await fetch(API + "/todos")
+      .then((res) => res.json()).then((data) => data)
+      .catch((err) => console.log(err));
 
       setLoading(false);
 
       setTodos(res);
+
     };
 
     loadData();
 
   },[])
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  const todo = {
-    id: Math.random(),
-    title,
-    time,
-    done:false,
-  };
-  await fetch(API + "/todos",{
-    method: "Post",
-    body: JSON.stringify(todo),
-    headers: {
-      "Content-type": "application/json",
-    },
-  });
-//TODO analisar o porque de map não estar funcionando
-  setTitle("");
-  setTime("");
-}
+    const todo = {
+      id: Math.random(),
+      title,
+      time,
+      done:false,
+    };
+    await fetch(API + "/todos",{
+      method: "POST",
+      body: JSON.stringify(todo),
+      headers: {
+        "Content-type": "application/json",
+      },
+    });
+    setTitle("");
+    setTime("");
+  }
   return (
     <div className="App">
       <div className="todo-header">
         <h1>React Todo</h1>
+        <h4>Falta listar as atividades</h4>
       </div>
       <div className="form-todo">
         <h2> Insira a sua tarefa </h2>
@@ -82,13 +85,10 @@ const handleSubmit = async (e) => {
       </div>
       <div className="list-todo">
         <h2> Listas de tarefas:</h2>
-        {todos.length === 0 && <p>Não existem tarefas</p>}
+        {todos.length === 0 ? <p>Não existem tarefas</p> : console.log("tem mais q 0")}
+        
 
-        {todos.map((todo)=>(
-          <div className="todo" key={todo.id}>
-            <p>{todo.title}</p>
-          </div>
-        ))}
+
       </div>
     </div>
   );
